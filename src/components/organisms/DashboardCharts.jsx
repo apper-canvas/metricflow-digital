@@ -2,14 +2,19 @@ import { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { motion } from 'framer-motion';
 import Card from '@/components/atoms/Card';
+import { Button } from '@/components/atoms/Button';
+import { ApperIcon } from '@/components/ApperIcon';
 import Loading from '@/components/ui/Loading';
 import Error from '@/components/ui/Error';
-
+import { metricService } from '@/services/api/metricService';
+import { exportService } from '@/services/api/exportService';
+import { toast } from 'react-toastify';
 const DashboardCharts = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [exportLoading, setExportLoading] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   useEffect(() => {
     loadChartData();
   }, []);
@@ -180,7 +185,104 @@ const DashboardCharts = () => {
     } finally {
       setLoading(false);
     }
+};
+
+  const handleExport = async (chartType, format) => {
+    try {
+      setExportLoading(true);
+      setActiveDropdown(null);
+      
+      const chartConfig = chartData[chartType];
+      const exportData = await metricService.exportChartData(chartConfig, chartType, format);
+      
+      const titles = {
+        revenue: 'Revenue Trend',
+        users: 'User Distribution', 
+        activity: 'User Activity'
+      };
+      
+      const filename = `${titles[chartType].replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}`;
+      
+      switch (format) {
+        case 'csv':
+          await exportService.exportToCSV(exportData.data, filename);
+          break;
+        case 'excel':
+          await exportService.exportToExcel(exportData.data, filename);
+          break;
+        case 'pdf':
+          await exportService.exportToPDF(exportData.data, filename, titles[chartType]);
+          break;
+      }
+      
+      toast.success(`Chart exported successfully as ${format.toUpperCase()}`);
+    } catch (error) {
+      toast.error(`Export failed: ${error.message}`);
+    } finally {
+      setExportLoading(false);
+    }
   };
+
+  const ExportDropdown = ({ chartType, title }) => (
+    <div className="relative">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setActiveDropdown(activeDropdown === chartType ? null : chartType)}
+        disabled={exportLoading}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+      >
+        <ApperIcon name="Download" size={16} />
+        <span className="hidden sm:inline">Export</span>
+      </Button>
+      
+      {activeDropdown === chartType && (
+        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+          <div className="py-2">
+            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-100">
+              Export {title}
+            </div>
+            <button
+              onClick={() => handleExport(chartType, 'csv')}
+              disabled={exportLoading}
+              className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-50"
+            >
+              <ApperIcon name="FileText" size={14} />
+              CSV Format
+            </button>
+            <button
+              onClick={() => handleExport(chartType, 'excel')}
+              disabled={exportLoading}
+              className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-50"
+            >
+              <ApperIcon name="FileSpreadsheet" size={14} />
+              Excel Format
+            </button>
+            <button
+              onClick={() => handleExport(chartType, 'pdf')}
+              disabled={exportLoading}
+              className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-50"
+            >
+              <ApperIcon name="FileImage" size={14} />
+              PDF Format
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeDropdown && !event.target.closest('.relative')) {
+        setActiveDropdown(null);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeDropdown]);
 
   if (loading) {
     return <Loading type="dashboard" />;
@@ -197,8 +299,11 @@ const DashboardCharts = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
+<Card className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">Revenue Trend</h3>
+            <ExportDropdown chartType="revenue" title="Revenue Trend" />
+          </div>
           <Chart 
             options={chartData.revenue.options} 
             series={chartData.revenue.series} 
@@ -213,8 +318,11 @@ const DashboardCharts = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">User Distribution</h3>
+<Card className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">User Distribution</h3>
+            <ExportDropdown chartType="users" title="User Distribution" />
+          </div>
           <Chart 
             options={chartData.users.options} 
             series={chartData.users.series} 
@@ -230,8 +338,11 @@ const DashboardCharts = () => {
         transition={{ delay: 0.3 }}
         className="lg:col-span-2"
       >
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">User Activity</h3>
+<Card className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">User Activity</h3>
+            <ExportDropdown chartType="activity" title="User Activity" />
+          </div>
           <Chart 
             options={chartData.activity.options} 
             series={chartData.activity.series} 
