@@ -3,10 +3,10 @@ import Chart from 'react-apexcharts'
 import { motion } from 'framer-motion'
 import Card from '@/components/atoms/Card'
 import Button from '@/components/atoms/Button'
-import { ApperIcon } from '@/components/ApperIcon'
+import ApperIcon from '@/components/ApperIcon'
 import Loading from '@/components/ui/Loading'
 import Error from '@/components/ui/Error'
-import { metricService } from '@/services/api/metricService';
+import { metricService } from '@/services/api/metricService'
 import { exportService } from '@/services/api/exportService';
 import { toast } from 'react-toastify';
 const DashboardCharts = () => {
