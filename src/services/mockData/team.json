@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "admin",
+    "status": "active",
+    "joinedDate": "2024-01-15T10:00:00Z",
+    "avatar": null
+  },
+  {
+    "Id": 2,
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@example.com",
+    "role": "manager",
+    "status": "active",
+    "joinedDate": "2024-02-01T14:30:00Z",
+    "avatar": null
+  },
+  {
+    "Id": 3,
+    "name": "Michael Chen",
+    "email": "michael.chen@example.com",
+    "role": "member",
+    "status": "active",
+    "joinedDate": "2024-02-15T09:15:00Z",
+    "avatar": null
+  },
+  {
+    "Id": 4,
+    "name": "Emily Rodriguez",
+    "email": "emily.rodriguez@example.com",
+    "role": "member",
+    "status": "pending",
+    "joinedDate": "2024-03-01T16:45:00Z",
+    "avatar": null
+  },
+  {
+    "Id": 5,
+    "name": "David Kim",
+    "email": "david.kim@example.com",
+    "role": "member",
+    "status": "active",
+    "joinedDate": "2024-03-10T11:20:00Z",
+    "avatar": null
+  }
+]

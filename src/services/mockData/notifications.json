@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "type": "success",
+    "title": "New team member joined",
+    "message": "Emily Rodriguez has joined your team and is ready to collaborate.",
+    "timestamp": "2024-12-19T10:30:00Z",
+    "read": false
+  },
+  {
+    "Id": 2,
+    "type": "info",
+    "title": "Monthly report ready",
+    "message": "Your November analytics report is now available for download.",
+    "timestamp": "2024-12-19T08:15:00Z",
+    "read": false
+  },
+  {
+    "Id": 3,
+    "type": "warning",
+    "title": "System maintenance scheduled",
+    "message": "Scheduled maintenance on December 22nd from 2:00 AM to 4:00 AM UTC.",
+    "timestamp": "2024-12-18T16:45:00Z",
+    "read": false
+  },
+  {
+    "Id": 4,
+    "type": "success",
+    "title": "Revenue milestone reached",
+    "message": "Congratulations! You've reached $150k in total revenue this month.",
+    "timestamp": "2024-12-18T14:20:00Z",
+    "read": true
+  },
+  {
+    "Id": 5,
+    "type": "error",
+    "title": "Integration error",
+    "message": "There was an issue with the Slack integration. Please check your settings.",
+    "timestamp": "2024-12-18T12:10:00Z",
+    "read": true
+  },
+  {
+    "Id": 6,
+    "type": "info",
+    "title": "New feature available",
+    "message": "Check out our new team collaboration features in the Team section.",
+    "timestamp": "2024-12-17T09:30:00Z",
+    "read": true
+  }
+]

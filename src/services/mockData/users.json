@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "admin",
+    "avatar": null,
+    "preferences": {
+      "emailNotifications": true,
+      "pushNotifications": true,
+      "weeklyReports": true,
+      "darkMode": false
+    },
+    "createdAt": "2024-01-15T10:00:00Z"
+  }
+]
