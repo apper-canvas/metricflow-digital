@@ -1,7 +1,7 @@
-import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import { saveAs } from 'file-saver'
 
 export const exportService = {
   exportToCSV: (data, filename) => {
